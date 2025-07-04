@@ -153,6 +153,41 @@ Reshape requires same # of elements in original array and new array.
 W = w.reshape(3,1)
 W
 
+"""Reshaping W matrix to play with transpose."""
+
+W_as_one_row = W.reshape(1,3)
+print(W_as_one_row)
+
+"""@ is np.matmul shorthand
+
+https://numpy.org/doc/2.1/reference/generated/numpy.matmul.html#numpy.matmul
+
+Playing with transpositions
+"""
+
+w_t = w.T
+
+print(X_T.shape)
+print(w_t.shape)
+m_t = X_T @ W_as_one_row.T
+m_t
+
+m_o = w @ X
+m_o.shape
+
+m_new = m_o.reshape(1,3)
+m_new
+
+"""np.allclose
+
+Returns True if two arrays are element-wise equal within a tolerance.
+
+**KEEP IN MIND THE SHAPE MUST ALIGN (e.g., (1,4) is not the same as (4,1)).
+https://numpy.org/doc/2.3/reference/generated/numpy.allclose.html#numpy-allclose
+"""
+
+np.allclose(X_T @ W_as_one_row.T, m_new.T)
+
 X @ W
 
 np.dot(X,W)
@@ -175,15 +210,48 @@ $y = mx + b$
 
 ---
 
-Normal Equation Method vs Gradient Descent
+Normal Equation Method
 
 $$W = (X^T X)^{-1} X^T Y$$
+
+---
+Identity matrix
+
+np.eye
+
+Return a 2-D array with ones on the diagonal and zeros elsewhere.
+
+https://numpy.org/doc/2.3/reference/generated/numpy.eye.html#numpy.eye
+
+Inverse matrices
+
+np.linalg.inv
+
+DETERMINANT (also called AREA) is the SCALING FACTOR
+
+A matrix has an inverse (is invertible) if and only if its determinant is non-zero.
+
+Cannot invert a singular matrix because determinant is 0.  More simply, determinant is divisor & can't divide by 0. Inverted matrix will be undefined.
 """
+
+#n = np.linalg.inv(X)
+#n
 
 norm = ((X_T * X) ** -1) * X_T * Y
 norm
 
+"""Ridge regression to solve problem of singular matrix.  We add a small 'ridge' to the diagonal."""
 
+id_m = 0.1 * np.eye(3)
+id_m
 
+n_c_ridge = (X + id_m)
+n_c_ridge
 
+inv = np.linalg.inv(n_c_ridge)
+inv
 
+"""Using allclose again to check if matrices are the same aside from rounding off."""
+
+check_close = np.allclose(n_c_ridge @ inv, np.eye(3))
+check_close
