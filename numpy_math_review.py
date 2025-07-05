@@ -237,21 +237,106 @@ Cannot invert a singular matrix because determinant is 0.  More simply, determin
 #n = np.linalg.inv(X)
 #n
 
-norm = ((X_T * X) ** -1) * X_T * Y
-norm
+#norm = np.linalg.inv((X_T @ X)) @ X_T @ Y
+#norm
 
 """Ridge regression to solve problem of singular matrix.  We add a small 'ridge' to the diagonal."""
 
 id_m = 0.1 * np.eye(3)
 id_m
 
-n_c_ridge = (X + id_m)
-n_c_ridge
+"""Test X.shape
 
-inv = np.linalg.inv(n_c_ridge)
+index 0 rows
+
+"""
+
+id_test = 0.1 * np.eye(X.shape[0])
+id_test
+
+oh = X.shape[0]
+oh
+
+a = np.array([[1, 2], [3, 4], [5, 6]])
+
+print(a)
+print(a.shape[0])
+print(a.shape[1])
+
+x_ridge = (X + id_m)
+x_ridge
+
+inv = np.linalg.inv(x_ridge)
 inv
 
 """Using allclose again to check if matrices are the same aside from rounding off."""
 
-check_close = np.allclose(n_c_ridge @ inv, np.eye(3))
+check_close = np.allclose(x_ridge @ inv, np.eye(3))
 check_close
+
+"""Using normal equation to calculate weights (W)
+
+$$W = (X^T X)^{-1} X^T Y$$
+"""
+
+Y = data[['tmax_tomorrow']].iloc[:3].to_numpy()
+W = np.linalg.inv(X.T @ X + id_m) @ X.T @ Y
+# = np.linalg.inv(X.T @ X + 0.1 * np.eye(X.shape[0])) @ X.T @ Y
+W
+
+Y
+
+X @ W
+
+c = np.ones((5,1))
+c
+
+d = np.ones((1,1))
+d
+
+e = c + d
+e
+
+f = np.array([[2,4,7,8], [6,8,5,2], [10,12,7,6]])
+print(f.shape)
+print(len(f))
+
+"""Derivative is slope of tangent line to the curve of the function at a specific point.
+
+---
+Finite differences method
+
+$\frac{y^2 - y^1}{x^2 - x^1}$
+
+---
+Derivatives important for training neural networks and backpropagation.
+
+Plotting functions and calculating derivatives.
+"""
+
+import matplotlib.pyplot as plt
+
+x = np.arange(-60, 60, 0.1)
+fx = x ** 3
+
+plt.plot(x, fx)
+
+x1 = 40 - 1e-7
+x2 = 40 + 1e-7
+
+y1 = x1 ** 3
+y2 = x2 ** 3
+
+slope = (y2 - y1)/(x2 - x1)
+slope
+
+"""Checking against my derivitave calculation:
+
+$f(x) = x^3$
+
+$f'(x) = 3x^2$
+"""
+
+x = 40
+der = 3 * x ** 2
+der
