@@ -227,12 +227,27 @@ Inverse matrices
 
 np.linalg.inv
 
-DETERMINANT (also called AREA) is the SCALING FACTOR
+For matrix A, det(A⁻¹) = 1 / det(A)
+
+DETERMINANT
 
 A matrix has an inverse (is invertible) if and only if its determinant is non-zero.
 
-Cannot invert a singular matrix because determinant is 0.  More simply, determinant is divisor & can't divide by 0. Inverted matrix will be undefined.
+Singular matrix is square, DET=0 and therefore non-invertible.
+
+Cannot invert a singular matrix because determinant is 0.  More simply, determinant is divisor of inverse formula & can't divide by 0. Inverted matrix will be undefined.
+
+Thinking through with examples I create.
 """
+
+my_sing3 = np.array([[1, 2, 3],
+                    [5, 6, 7],
+                    [3, 6, 9]])
+my_sing3
+
+#np.linalg.inv(my_sing3)
+
+i3 = np.linalg.inv(np.eye(3))
 
 #n = np.linalg.inv(X)
 #n
@@ -245,25 +260,7 @@ Cannot invert a singular matrix because determinant is 0.  More simply, determin
 id_m = 0.1 * np.eye(3)
 id_m
 
-"""Test X.shape
-
-index 0 rows
-
-"""
-
-id_test = 0.1 * np.eye(X.shape[0])
-id_test
-
-oh = X.shape[0]
-oh
-
-a = np.array([[1, 2], [3, 4], [5, 6]])
-
-print(a)
-print(a.shape[0])
-print(a.shape[1])
-
-x_ridge = (X + id_m)
+x_ridge = X + id_m
 x_ridge
 
 inv = np.linalg.inv(x_ridge)
@@ -284,29 +281,31 @@ W = np.linalg.inv(X.T @ X + id_m) @ X.T @ Y
 # = np.linalg.inv(X.T @ X + 0.1 * np.eye(X.shape[0])) @ X.T @ Y
 W
 
+"""Tomorrow actual values."""
+
 Y
+
+"""Tomorrow predicted values."""
 
 X @ W
 
-c = np.ones((5,1))
-c
+"""Broadcasting."""
 
-d = np.ones((1,1))
-d
+c = np.array([[1, 2, 3],
+              [1, 1, 1],
+              [2, 2, 2]])
 
-e = c + d
-e
+d = np.array([[3, 3, 3]])
 
-f = np.array([[2,4,7,8], [6,8,5,2], [10,12,7,6]])
-print(f.shape)
-print(len(f))
+g = c + e
+g
 
-"""Derivative is slope of tangent line to the curve of the function at a specific point.
+full3 = np.full((4,3), 5)
+full3
 
----
-Finite differences method
+"""DERIVATIVES.
 
-$\frac{y^2 - y^1}{x^2 - x^1}$
+Derivative is slope of tangent line to the curve of the function at a specific point.
 
 ---
 Derivatives important for training neural networks and backpropagation.
@@ -316,17 +315,27 @@ Plotting functions and calculating derivatives.
 
 import matplotlib.pyplot as plt
 
-x = np.arange(-60, 60, 0.1)
+x = np.arange(-50, 50, 0.1)
 fx = x ** 3
 
 plt.plot(x, fx)
 
+"""Finite differences method
+
+With slope equation
+
+$m = \frac{y^2 - y^1}{x^2 - x^1}$
+"""
+
+# Use 2 points x very close to x on both sides of x for x=40.
 x1 = 40 - 1e-7
 x2 = 40 + 1e-7
 
+# Solve for ys.
 y1 = x1 ** 3
 y2 = x2 ** 3
 
+# Calculate slope.
 slope = (y2 - y1)/(x2 - x1)
 slope
 
@@ -338,5 +347,19 @@ $f'(x) = 3x^2$
 """
 
 x = 40
-der = 3 * x ** 2
-der
+x_prime = 3 * x ** 2
+x_prime
+
+x = np.arange(-50, 50, 0.1)
+fx = (x ** 2) * 3
+
+plt.plot(x, fx)
+
+"""Second derivative
+
+f"
+"""
+
+second_x_prime = 6 * x
+
+plt.plot(x, second_x_prime)
